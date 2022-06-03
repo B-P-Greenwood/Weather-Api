@@ -1,0 +1,5 @@
+-Set up express api skeleton 
+-Set up CRUD routes for ClimaCell API
+    -have routes folder and file 
+    -have model folder and file 
+    -only need get and get specific 
