@@ -1,13 +1,16 @@
 import express from "express";
-const app = express();
-const PORT = 3000;
+import {html} from "./config.js";
 import weatherRouter from "./routes/weather.js";
 
-app.get("/", function (req, res){
-    res.send("Welcome to my weather app");
-});
+const app = express();
+const PORT = 3000;
 
+app.use(express.static("frontend"));
 app.use(express.json());
+
+app.get("/", function(req, res){
+    res.sendFile(html);
+})
 app.use("/weather", weatherRouter);
 app.listen(PORT);
 

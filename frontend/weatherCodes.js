@@ -1,4 +1,4 @@
-weatherCodes ={
+export const weatherCodes ={
     0: "Unknown",
     1000: "Clear, Sunny",
     1100: "Mostly Clear",
@@ -25,7 +25,27 @@ weatherCodes ={
     8000: "Thunderstorm"
 }
 
-export default weatherCodes;
+export const fields = [
+    "Cloud Base: ",
+    "Cloud Ceiling: ",
+    "Cloud Cover: ",
+    "Precipitation Intensity: ",
+    "Precipitation Type: ",
+    "Temperature: ",
+    "Temperature Apparent: ",
+    "Wind Direction: ",
+    "Wind Gust: ",
+    "Wind Speed: "
+]
+
+export const precipitationType = {
+    "0": "N/A",
+    "1": "Rain",
+    "2": "Snow",
+    "3": "Freezing Rain",
+    "4": "Ice Pellets"
+  }
+
 
 /*
 {

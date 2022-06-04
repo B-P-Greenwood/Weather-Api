@@ -8,22 +8,31 @@
     <title>Weather Api</title>
 </head>
 <body>
-    <nav>
-        
+    <nav id="nav-bar">
+        <a href="" class="nav-icon"><img src="images/burger.JPG" alt="menu icon"></a>
     </nav>
     <main>
         <section id="place">
             <h1>Birmingham</h1>
         </section>
         <section id="hourly">
-            
+            <img src="./images/Slight cloud.JPG">
         </section>
         <section id="tempreture">
-            
+            <h2></h2>
         </section>
         <section id="info-panel">
-            
+            <div>
+                <h3 id="overview"></h3>
+            </div>
+            <div id="details-section">
+                <span id ="clouds" class="column">
+                </span>
+                <span id="wind-temp" class="column">
+                </span>
+            </div>
         </section>
     </main>
+    <script type="module" src="./main.js"></script>
 </body>
 </html>
