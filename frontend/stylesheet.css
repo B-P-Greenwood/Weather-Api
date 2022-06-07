@@ -18,16 +18,23 @@ main{
     align-items: center;
 }
 section{
-    padding: 2vh;
+    padding: 1vh;
 }
 nav{
     display: flex;
     justify-content: right;
 }
 .nav-icon{
-    font-size: 23px;
     text-decoration: none;
-    padding: 10px;
+}
+#hour-bar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#hour-bar object{
+    margin-left: 10px;
+    margin-right: 10px;
 }
 #info-panel{
     height: 33vh;
@@ -46,4 +53,17 @@ nav{
 }
 h3{
     text-align: center;
+}
+#right-scroll{
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+#overview{
+    margin: 10px;
+}
+#tempreture{
+    font-size: 1.4em;
 }

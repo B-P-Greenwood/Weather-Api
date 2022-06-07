@@ -8,6 +8,15 @@ const clouds = document.querySelector("#clouds");
 const windTemp = document.querySelector("#wind-temp");
 const tempField = document.querySelector("#tempreture");
 const overview = document.querySelector("#overview");
+const hourly = document.querySelector("#hourly");
+const upcoming = document.querySelector("#upcoming");
+const leftButton = document.querySelector("#left-scroll");
+const rightButton = document.querySelector("#right-scroll");
+const place = document.querySelector("#place-time");
+let wReport ="";
+let location = 0;
+
+rightButton.addEventListener("click", scrollRight);
 
 async function getWeather() {
   const response = await fetch(`${url}/weather/`)
@@ -15,12 +24,73 @@ async function getWeather() {
     return response.json();
   })
   .then(function(response){
-    console.log(response.payload.data.timelines[0].intervals[0]);
+    wReport = response.payload.data;
     createReport(response.payload.data.timelines[0].intervals[0]);
+    otherTimes(response.payload.data.timelines[0].intervals[1].values.weatherCode);
+    otherTimes(response.payload.data.timelines[0].intervals[2].values.weatherCode);
+    otherTimes(response.payload.data.timelines[0].intervals[3].values.weatherCode);
+    console.log(response.payload.data);
+    console.log(wReport);
   });
  };
+
+async function main(main){
+
+  createReport(wReport.timelines[0].intervals[location]);
+
+}
+
+function otherTimes(code){
+  const weatherImage = document.createElement("object");
+  weatherImage.data=setWeatherImage(code);
+  weatherImage.width="80";
+  weatherImage.height="80";
+  upcoming.appendChild(weatherImage);
+}
+
+ //scrolls the hour one to the right 
+function scrollRight(){
+  location +=1;
+  refresh();
+  createReport(wReport.timelines[0].intervals[location])
+  otherTimes(wReport.timelines[0].intervals[location+1].values.weatherCode)
+  otherTimes(wReport.timelines[0].intervals[location+2].values.weatherCode)
+  otherTimes(wReport.timelines[0].intervals[location+3].values.weatherCode)
+}
+
+function refresh(){
+  tempField.innerText ="";
+  windTemp.innerText ="";
+  clouds.innerText = "";
+  overview.innerText = "";
+  upcoming.innerText = "";
+  hourly.innerText = "";
+}
+
+ //get appropriate image for weather from code
+ function setWeatherImage(code){
+  
+  if(code === 1000){
+    return "./images/Sun.svg";
+  }if(code === 1100 || code === 1101){
+    return "./images/Sun-Cloud.svg";
+  }if(code === 1001 || code === 1102){
+    return "./images/Cloudy.svg";
+  }if(code === 2000){
+    return "./images/Fog.svg";
+  }if(code === 2100){
+    return "./images/Light-Fog.svg";
+  }if(code === 4000 || code === 4200 || code === 4201){
+    return "./images/Rain.svg";
+  }if(code === 5001 || code === 5101 || code === 6000 || code === 6001 || code === 6200 || code === 6201 || code === 7000 || code === 7101 || code === 7102){
+    return "./images/Snow.svg"
+  }if(code === 8000){
+    return "./images/Thunderstorm.svg";
+  };
+};
   
 function createReport(report) {
+
   const cloudBase = report.values.cloudBase;
   const cloudCeiling = report.values.cloudCeiling;
   const cloudCover = report.values.cloudCover;
@@ -32,6 +102,13 @@ function createReport(report) {
   const windDirection = report.values.windDirection;
   const windGust = report.values.windGust;
   const windSpeed = report.values.windSpeed;
+
+  
+  const weatherImage = document.createElement("object");
+  weatherImage.data=setWeatherImage(weather);
+  weatherImage.width="150";
+  weatherImage.height="150";
+  hourly.appendChild(weatherImage);
 
   const values = [];
   values.push(`${cloudBase} km`);
@@ -65,6 +142,8 @@ function createReport(report) {
     }
   }
 
+  let currnetTime = wReport.timelines[0].intervals[location].startTime.slice(11,16);
+  place.innerText = `Birmingham : ${currnetTime}`
   tempField.innerText = `${Math.ceil(tempreture)} \u2103`;
 
   //sets the weather type title according to weatherCodes object
