@@ -13,10 +13,12 @@ const upcoming = document.querySelector("#upcoming");
 const leftButton = document.querySelector("#left-scroll");
 const rightButton = document.querySelector("#right-scroll");
 const place = document.querySelector("#place-time");
+const previous = document.querySelector("#previous");
 let wReport ="";
-let location = 0;
+let location = 3;
 
 rightButton.addEventListener("click", scrollRight);
+leftButton.addEventListener("click", scrollLeft);
 
 async function getWeather() {
   const response = await fetch(`${url}/weather/`)
@@ -25,20 +27,19 @@ async function getWeather() {
   })
   .then(function(response){
     wReport = response.payload.data;
-    createReport(response.payload.data.timelines[0].intervals[0]);
-    otherTimes(response.payload.data.timelines[0].intervals[1].values.weatherCode);
-    otherTimes(response.payload.data.timelines[0].intervals[2].values.weatherCode);
+    createReport(response.payload.data.timelines[2].intervals[0]);
     otherTimes(response.payload.data.timelines[0].intervals[3].values.weatherCode);
+    otherTimes(response.payload.data.timelines[0].intervals[4].values.weatherCode);
+    otherTimes(response.payload.data.timelines[0].intervals[5].values.weatherCode);
+
+    previousTimes(response.payload.data.timelines[0].intervals[2].values.weatherCode);
+    previousTimes(response.payload.data.timelines[0].intervals[1].values.weatherCode);
+    previousTimes(response.payload.data.timelines[0].intervals[0].values.weatherCode);
+
     console.log(response.payload.data);
     console.log(wReport);
   });
  };
-
-async function main(main){
-
-  createReport(wReport.timelines[0].intervals[location]);
-
-}
 
 function otherTimes(code){
   const weatherImage = document.createElement("object");
@@ -48,14 +49,40 @@ function otherTimes(code){
   upcoming.appendChild(weatherImage);
 }
 
+function previousTimes(code){
+  const weatherImage = document.createElement("object");
+  weatherImage.data=setWeatherImage(code);
+  weatherImage.width="80";
+  weatherImage.height="80";
+  previous.appendChild(weatherImage);  
+}
+
  //scrolls the hour one to the right 
 function scrollRight(){
   location +=1;
   refresh();
-  createReport(wReport.timelines[0].intervals[location])
-  otherTimes(wReport.timelines[0].intervals[location+1].values.weatherCode)
-  otherTimes(wReport.timelines[0].intervals[location+2].values.weatherCode)
-  otherTimes(wReport.timelines[0].intervals[location+3].values.weatherCode)
+  createReport(wReport.timelines[0].intervals[location]);
+  otherTimes(wReport.timelines[0].intervals[location+1].values.weatherCode);
+  otherTimes(wReport.timelines[0].intervals[location+2].values.weatherCode);
+  otherTimes(wReport.timelines[0].intervals[location+3].values.weatherCode);
+
+  previousTimes(wReport.timelines[0].intervals[location-3].values.weatherCode);
+  previousTimes(wReport.timelines[0].intervals[location-2].values.weatherCode);
+  previousTimes(wReport.timelines[0].intervals[location-1].values.weatherCode);
+}
+
+ //scrolls the hour one to the left 
+function scrollLeft(){
+  location -=1;
+  refresh();
+  createReport(wReport.timelines[0].intervals[location]);
+  otherTimes(wReport.timelines[0].intervals[location+1].values.weatherCode);
+  otherTimes(wReport.timelines[0].intervals[location+2].values.weatherCode);
+  otherTimes(wReport.timelines[0].intervals[location+3].values.weatherCode);
+
+  previousTimes(wReport.timelines[0].intervals[location-3].values.weatherCode);
+  previousTimes(wReport.timelines[0].intervals[location-2].values.weatherCode);
+  previousTimes(wReport.timelines[0].intervals[location-1].values.weatherCode);
 }
 
 function refresh(){
@@ -65,6 +92,7 @@ function refresh(){
   overview.innerText = "";
   upcoming.innerText = "";
   hourly.innerText = "";
+  previous.innerText = "";
 }
 
  //get appropriate image for weather from code
@@ -121,7 +149,7 @@ function createReport(report) {
   values.push(`${windGust} km/h`);
   values.push(`${windSpeed} km/h`);
 
-  //sets the values in the clouds ection of webpage
+  //sets the values in the clouds section of webpage
   for(let i=0; i<4; i++){
     let p = document.createElement("p");
     p.innerText = fields[i]+values[i];
